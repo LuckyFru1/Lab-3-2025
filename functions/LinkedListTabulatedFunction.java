@@ -153,17 +153,23 @@ public class LinkedListTabulatedFunction implements TabulatedFunction{
             return Double.NaN;
         }
         if (Math.abs(x - getLeftDomainBorder()) < EPSILON_DOUBLE) {
-            return getLeftDomainBorder();
+            return getNodeByIndex(0).getPoint().getY();
         }
         if (Math.abs(x  - getRightDomainBorder()) < EPSILON_DOUBLE) {
-            return getRightDomainBorder();
+            return getNodeByIndex(pointsCount - 1).getPoint().getY();
         }
         else {
             int i;
             double value = 0;
-            for (i = 0; x > getNodeByIndex(i).getPoint().getX(); i++){
-                value = getNodeByIndex(i).getPoint().getY()+(getNodeByIndex(i+1).getPoint().getY() - getNodeByIndex(i).getPoint().getY())*(x-getNodeByIndex(i).getPoint().getX())
-                /(getNodeByIndex(i+1).getPoint().getX()- getNodeByIndex(i).getPoint().getX());
+            for (i = 0; x >= getNodeByIndex(i).getPoint().getX(); i++){
+                if (Math.abs(x - getNodeByIndex(i).getPoint().getX()) < EPSILON_DOUBLE){
+                   value = getNodeByIndex(i).getPoint().getY(); 
+                }
+                else{
+                    FunctionNode Node = getNodeByIndex(i);
+                    value = Node.getPoint().getY() + (Node.getNext().getPoint().getY() - Node.getPoint().getY())*(x - Node.getPoint().getX())/(Node.getNext().getPoint().getX() - Node.getPoint().getX());
+                    //value = y0+(y1 - y0)*(x - x0)/(x1 - x0);
+                }
             }
             return value; 
         }

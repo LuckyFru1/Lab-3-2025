@@ -48,7 +48,7 @@ public class Main {
             System.out.println("X[" + i + "] = " + Function.getPointX(i) + " and Y[" + i + "] = " + Function.getPointY(i));
         }
         System.out.println("\nРасчет значения Y с помощью линейной интерполяции");
-        double ValueX = 7;
+        double ValueX = 50;
         double ValueY = Function.getFunctionValue(ValueX);
         System.out.println("Значение функции X = " + ValueX + " Y = " + ValueY);
 
