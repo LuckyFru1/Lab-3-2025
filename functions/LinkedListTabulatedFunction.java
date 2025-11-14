@@ -64,7 +64,6 @@ public class LinkedListTabulatedFunction implements TabulatedFunction{
         return current;
     }
     
-
     private FunctionNode addNodeToTail(FunctionPoint point) {
         FunctionNode newNode = new FunctionNode(point, head.getPrev(), head);
         FunctionNode tail = head.getPrev();
@@ -153,25 +152,24 @@ public class LinkedListTabulatedFunction implements TabulatedFunction{
             return Double.NaN;
         }
         if (Math.abs(x - getLeftDomainBorder()) < EPSILON_DOUBLE) {
-            return getNodeByIndex(0).getPoint().getY();
+            return head.getNext().getPoint().getY();
         }
         if (Math.abs(x  - getRightDomainBorder()) < EPSILON_DOUBLE) {
-            return getNodeByIndex(pointsCount - 1).getPoint().getY();
+            return head.getPrev().getPoint().getY();
         }
         else {
             int i;
             double value = 0;
             for (i = 0; x >= getNodeByIndex(i).getPoint().getX(); i++){
-                if (Math.abs(x - getNodeByIndex(i).getPoint().getX()) < EPSILON_DOUBLE){
-                   value = getNodeByIndex(i).getPoint().getY(); 
+                FunctionNode Node = getNodeByIndex(i);
+                if (Math.abs(x - Node.getPoint().getX()) < EPSILON_DOUBLE){
+                   value = Node.getPoint().getY(); 
                 }
                 else{
-                    FunctionNode Node = getNodeByIndex(i);
                     value = Node.getPoint().getY() + (Node.getNext().getPoint().getY() - Node.getPoint().getY())*(x - Node.getPoint().getX())/(Node.getNext().getPoint().getX() - Node.getPoint().getX());
-                    //value = y0+(y1 - y0)*(x - x0)/(x1 - x0);
                 }
             }
-            return value; 
+            return value;
         }
     }
 
@@ -204,7 +202,7 @@ public class LinkedListTabulatedFunction implements TabulatedFunction{
             }
         }
         else {
-            if (point.getX() < getNodeByIndex(index-1).getPoint().getX() || point.getX() > getNodeByIndex(index+1).getPoint().getX()) {
+            if (point.getX() < currentNode.getPrev().getPoint().getX() || point.getX() > currentNode.getNext().getPoint().getX()) {
                 throw new InappropriateFunctionPointException("Новая точка X (" + point.getX() + ") выходит за границы соседних к ней точек.");
             }
         }
@@ -226,10 +224,10 @@ public class LinkedListTabulatedFunction implements TabulatedFunction{
         if (index < 0 || index >= pointsCount) {
             throw new FunctionPointIndexOutOfBoundsException("Задать координату X с индексом " + index + " невозможно, так как размер массива" + this.pointsCount);
         }
-        if (x < getNodeByIndex(index-1).getPoint().getX() || x > getNodeByIndex(index+1).getPoint().getX()) {
+        FunctionNode currentNode = getNodeByIndex(index);
+        if (x <  currentNode.getPrev().getPoint().getX() || x > currentNode.getNext().getPoint().getX()) {
             throw new InappropriateFunctionPointException("Новая точка X (" + x + ") выходит за границы соседних к ней точек.");
         }
-        FunctionNode currentNode = getNodeByIndex(index);
         currentNode.getPoint().setX(x);
     }
 
@@ -273,8 +271,9 @@ public class LinkedListTabulatedFunction implements TabulatedFunction{
         else{
             int i = 0;
             while (point.getX() > getNodeByIndex(i).getPoint().getX()) ++i;
-            if (Math.abs(point.getX() - getNodeByIndex(i).getPoint().getX()) < EPSILON_DOUBLE) {
-                throw new InappropriateFunctionPointException("Координата X добавляемой точки совпадает с уже сужествующим X = " + getNodeByIndex(i).getPoint().getX());
+            FunctionNode Node = getNodeByIndex(i);
+            if (Math.abs(point.getX() - Node.getPoint().getX()) < EPSILON_DOUBLE) {
+                throw new InappropriateFunctionPointException("Координата X добавляемой точки совпадает с уже сужествующим X = " +  Node.getPoint().getX());
             }
             else{
                 addNodeByIndex(i, point);

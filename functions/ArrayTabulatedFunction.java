@@ -80,8 +80,13 @@ public class ArrayTabulatedFunction implements TabulatedFunction{
             int i;
             double value = 0;
             // Условие цикла необходимо для нахождения нужного промежутка для переданного X
-            for (i = 0; x > points[i].getX(); i++){
-                value = points[i].getY()+(points[i+1].getY() - points[i].getY())*(x-points[i].getX())/(points[i+1].getX()-points[i].getX());
+            for (i = 0; x >= points[i].getX(); i++){
+                if (Math.abs(x - points[i].getX()) < EPSILON_DOUBLE){
+                    value = points[i].getY();
+                }
+                else{
+                    value = points[i].getY()+(points[i+1].getY() - points[i].getY())*(x-points[i].getX())/(points[i+1].getX()-points[i].getX());
+                }
             }
             return value; 
         }

@@ -33,7 +33,6 @@ public class Main {
             System.out.println("X[" + i + "] = " + Function.getPointX(i) + " and Y[" + i + "] = " + Function.getPointY(i));
         }
 
-        System.out.println(data.length);
         System.out.println("\nДобавление точек ");
         try {
             Function.addPoint(PointToAdd1);
@@ -84,7 +83,6 @@ public class Main {
         } catch (InappropriateFunctionPointException mes) {
             System.out.println("\n Ошибка при добавлении точек: "+ mes.getMessage());
         }
-        System.out.println(ListFunction.getPointsCount());
         System.out.println("\nМатрица после добавления точек: ");
         for (int i = 0; i < ListFunction.getPointsCount(); i++) {
             System.out.println("X[" + i + "] = " + ListFunction.getPointX(i) + " and Y[" + i + "] = " + ListFunction.getPointY(i));
